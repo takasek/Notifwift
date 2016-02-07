@@ -132,12 +132,6 @@ Notifwift is available through [CocoaPods](http://cocoapods.org). To install it,
 pod "Notifwift"
 ```
 
-Notifwift is available through [Carthage](https://github.com/Carthage/Carthage). To install it, simply add the following line to your Cartfile:
-
-```ruby
-github "takasek/Notifwift"
-```
-
 ## Author
 
 [takasek](https://twitter.com/takasek)
