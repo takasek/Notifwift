@@ -1,5 +1,8 @@
-Notifwift
-====
+# Notifwift
+
+[![Version](https://img.shields.io/cocoapods/v/Notifwift.svg?style=flat)](http://cocoapods.org/pods/Notifwift)
+[![License](https://img.shields.io/cocoapods/l/Notifwift.svg?style=flat)](http://cocoapods.org/pods/Notifwift)
+[![Platform](https://img.shields.io/cocoapods/p/Notifwift.svg?style=flat)](http://cocoapods.org/pods/Notifwift)
 
 Notifwift is the NS**Notif**icationCenter wrapper for S**wift**.
 
@@ -10,8 +13,7 @@ Notifwift resolves;
 - long syntax to post/observe notifications
 
 
-Usage
-=====
+## Usage
 
 ```swift
     do {
@@ -122,23 +124,19 @@ Usage
 ```
 
 
-Installation
-------------
+## Installation
 
-- **For iOS 8+ projects** with [CocoaPods](https://cocoapods.org):
+Notifwift is available through [CocoaPods](http://cocoapods.org). To install
+it, simply add the following line to your Podfile:
 
-    ```ruby
-    pod 'Notifwift', '~> 0.1.0'
-    ```
+```ruby
+pod "Notifwift"
+```
 
-- **For iOS 8+ projects** with [Carthage](https://github.com/Carthage/Carthage):
+## Author
 
-    ```
-    github "takasek/Notifwift" ~> 0.1.0
-    ```
+[takasek](https://twitter.com/takasek)
 
+## License
 
-License
--------
-
-**Notifwift** is under MIT license.
+Notifwift is available under the MIT license. See the LICENSE file for more info.
