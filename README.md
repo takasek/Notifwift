@@ -12,7 +12,8 @@ Notifwift resolves;
 
 Usage
 =====
-```
+
+```swift
     do {
         let nt = Notifwift()
         nt.observe(notificationName) { notification in
@@ -27,7 +28,7 @@ Usage
     //printed nothing. Observers expire when the Notifwift instance(in this case) is destructed.
 ```
 
-```
+```swift
     let nt = Notifwift()
     nt.observePayload(notificationName) { (_, payload:String) in
         print("This closure observes nothing but NSNotification with String payload.", payload)
@@ -45,7 +46,7 @@ Usage
     // This closure observes nothing but NSNotification with Int payload. 1
 ```
 
-```
+```swift
     class Something {}
     class SubSomething: Something {}
     
@@ -67,7 +68,7 @@ Usage
     // Received SubSomething. Yes, of course, Notifwift recognizes subtypes. (SubSomething #1)
 ```
 
-```
+```swift
     enum SomeResult {
         case Success(String)
         case Fail(NSError)
@@ -95,7 +96,7 @@ Usage
     // Notifwift has a chemistry with Enum Associated Values. Error Domain= Code=0 "(null)"
 ```
 
-```
+```swift
     let obj1 = NSObject()
     let obj2 = NSObject()
     let nt = Notifwift()
