@@ -22,25 +22,25 @@
 
 import Foundation
 
-final class Notifwift {
+public final class Notifwift {
     private final class Container {
         let payload: Any
         init(payload: Any) { self.payload = payload }
     }
     private var pool = [NSObjectProtocol]()
     
-    static func post(name: String, from object: NSObject?=nil, payload: Any?=nil) {
+    public static func post(name: String, from object: NSObject?=nil, payload: Any?=nil) {
         NSNotificationCenter.defaultCenter().postNotificationName(name,
             object: object,
             userInfo: payload.map { ["container": Container(payload: $0)] }
         )
     }
-    func observe(name: String, from object: AnyObject?=nil, queue: NSOperationQueue?=nil, block:(notification:NSNotification) -> Void) {
+    public func observe(name: String, from object: AnyObject?=nil, queue: NSOperationQueue?=nil, block:(notification:NSNotification) -> Void) {
         pool.append(
             NSNotificationCenter.defaultCenter().addObserverForName(name, object: object, queue: queue, usingBlock: block)
         )
     }
-    func observePayload<T>(name: String, from object: AnyObject?=nil, queue: NSOperationQueue?=nil, block:(notification:NSNotification, payload: T) -> Void) {
+    public func observePayload<T>(name: String, from object: AnyObject?=nil, queue: NSOperationQueue?=nil, block:(notification:NSNotification, payload: T) -> Void) {
         pool.append(
             NSNotificationCenter.defaultCenter().addObserverForName(name, object: object, queue: queue) {
                 guard let payload = ($0.userInfo?["container"] as? Container)?.payload as? T else { return }
