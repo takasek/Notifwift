@@ -28,7 +28,9 @@ public final class Notifwift {
         init(payload: Any) { self.payload = payload }
     }
     private var pool = [NSObjectProtocol]()
-    
+
+    public init() {}
+
     public static func post(name: String, from object: NSObject?=nil, payload: Any?=nil) {
         NSNotificationCenter.defaultCenter().postNotificationName(name,
             object: object,
