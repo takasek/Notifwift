@@ -32,10 +32,10 @@ Notifwift resolves;
 
 ```swift
     let nt = Notifwift()
-    nt.observePayload(notificationName) { (_, payload:String) in
+    nt.observe(notificationName) { (_, payload:String) in
         print("This closure observes nothing but NSNotification with String payload.", payload)
     }
-    nt.observePayload(notificationName) { (_, payload:Int) in
+    nt.observe(notificationName) { (_, payload:Int) in
         print("This closure observes nothing but NSNotification with Int payload.", payload)
     }
     
@@ -53,10 +53,10 @@ Notifwift resolves;
     class SubSomething: Something {}
     
     let nt = Notifwift()
-    nt.observePayload(notificationName) { (_, p:Something) in
+    nt.observe(notificationName) { (_, p:Something) in
         print("Received Something.", p)
     }
-    nt.observePayload(notificationName) { (_, p:SubSomething) in
+    nt.observe(notificationName) { (_, p:SubSomething) in
         print("Received SubSomething. Yes, of course, Notifwift recognizes subtypes.", p)
     }
     
@@ -76,7 +76,7 @@ Notifwift resolves;
         case Fail(NSError)
     }
     let nt = Notifwift()
-    nt.observePayload(notificationName) { (_, p:SomeResult) in
+    nt.observe(notificationName) { (_, p:SomeResult) in
         switch p {
         case .Success(let str):
             print("Any Type can be used as a payload", str)

@@ -42,7 +42,7 @@ public final class Notifwift {
             NSNotificationCenter.defaultCenter().addObserverForName(name, object: object, queue: queue, usingBlock: block)
         )
     }
-    public func observePayload<T>(name: String, from object: AnyObject?=nil, queue: NSOperationQueue?=nil, block:(notification:NSNotification, payload: T) -> Void) {
+    public func observe<T>(name: String, from object: AnyObject?=nil, queue: NSOperationQueue?=nil, block:(notification:NSNotification, payload: T) -> Void) {
         pool.append(
             NSNotificationCenter.defaultCenter().addObserverForName(name, object: object, queue: queue) {
                 guard let payload = ($0.userInfo?["container"] as? Container)?.payload as? T else { return }

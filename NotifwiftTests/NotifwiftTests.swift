@@ -36,10 +36,10 @@ class NotifwiftTests: XCTestCase {
         var payloadInt: Any?
         
         let nt = Notifwift()
-        nt.observePayload(notificationName) { (_, p:String) in
+        nt.observe(notificationName) { (_, p:String) in
             payloadStr = p
         }
-        nt.observePayload(notificationName) { (_, p:Int) in
+        nt.observe(notificationName) { (_, p:Int) in
             payloadInt = p
         }
         
@@ -64,10 +64,10 @@ class NotifwiftTests: XCTestCase {
         class SubSomething: Something {}
         
         let nt = Notifwift()
-        nt.observePayload(notificationName) { (_, p:Something) in
+        nt.observe(notificationName) { (_, p:Something) in
             received = true
         }
-        nt.observePayload(notificationName) { (_, p:SubSomething) in
+        nt.observe(notificationName) { (_, p:SubSomething) in
             receivedSub = true
         }
         
