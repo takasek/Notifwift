@@ -49,25 +49,25 @@ Notifwift resolves;
 ```
 
 ```swift
-    class Something {}
-    class SubSomething: Something {}
+    class Animal {}
+    class Cat: Animal {}
     
     let nt = Notifwift()
-    nt.observe(notificationName) { (_, p:Something) in
-        print("Received Something.", p)
+    nt.observe(notificationName) { (_, p:Animal) in
+        print("Received Animal.", p)
     }
-    nt.observe(notificationName) { (_, p:SubSomething) in
-        print("Received SubSomething. Yes, of course, Notifwift recognizes subtypes.", p)
+    nt.observe(notificationName) { (_, p:Cat) in
+        print("Received Cat. Yes, of course, Notifwift recognizes subtypes.", p)
     }
     
-    Notifwift.post(notificationName, payload:Something())
+    Notifwift.post(notificationName, payload:Animal())
     //printed:
-    // Received Something. (Something #1)
+    // Received Animal. (Animal #1)
     
-    Notifwift.post(notificationName, payload:SubSomething())
+    Notifwift.post(notificationName, payload:Cat())
     //printed:
-    // Received Something. (SubSomething #1)
-    // Received SubSomething. Yes, of course, Notifwift recognizes subtypes. (SubSomething #1)
+    // Received Animal. (Cat #1)
+    // Received Cat. Yes, of course, Notifwift recognizes subtypes. (Cat #1)
 ```
 
 ```swift

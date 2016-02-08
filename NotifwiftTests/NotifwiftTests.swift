@@ -60,26 +60,26 @@ class NotifwiftTests: XCTestCase {
         var received: Bool?
         var receivedSub: Bool?
         
-        class Something {}
-        class SubSomething: Something {}
+        class Animal {}
+        class Cat: Animal {}
         
         let nt = Notifwift()
-        nt.observe(notificationName) { (_, p:Something) in
+        nt.observe(notificationName) { (_, p:Animal) in
             received = true
         }
-        nt.observe(notificationName) { (_, p:SubSomething) in
+        nt.observe(notificationName) { (_, p:Cat) in
             receivedSub = true
         }
         
         received = false
         receivedSub = false
-        Notifwift.post(notificationName, payload:Something())
+        Notifwift.post(notificationName, payload:Animal())
         XCTAssertTrue(received!)
         XCTAssertFalse(receivedSub!)
         
         received = false
         receivedSub = false
-        Notifwift.post(notificationName, payload:SubSomething())
+        Notifwift.post(notificationName, payload:Cat())
         XCTAssertTrue(received!)
         XCTAssertTrue(receivedSub!)
     }
