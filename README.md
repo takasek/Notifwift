@@ -124,6 +124,43 @@ Notifwift resolves;
 ```
 
 
+## Real World Example
+
+Here's an example usage.
+
+```swift
+let didReceiveUserNotification = "didReceiveUserNotification"
+
+final class MyViewController: UIViewController {
+    @IBOutlet var userInfoView: MyUserInfoView!
+    let notifwift = Notifwift()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        notifwift.observe(didReceiveUserNotification) { [weak self] (_, user: User) in
+            self?.reload(user)
+        }
+    }
+    
+    private func reload(user: User) {
+        userInfoView.reload(user)
+    }
+}
+
+final class MyUserRepository {
+    func fetchUser(id: Int) {
+        MyAPIManager.fetchUser(id) { (user: User) in
+            Notifwift.post(didReceiveUserNotification, payload: user)
+        }
+    }
+}
+
+```
+
+The Notifwift instance is alive during MyViewController instance.
+It dies when MyViewController instance dies, so observers registered in the Notifwift instance are to be removed automatically.  Never mind if you have to manage observer!
+
+
 ## Installation
 
 Notifwift is available through [CocoaPods](http://cocoapods.org). To install it, simply add the following line to your Podfile:
