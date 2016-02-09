@@ -32,10 +32,10 @@ Notifwift resolves;
 
 ```swift
     let nt = Notifwift()
-    nt.observe(notificationName) { (_, payload:String) in
+    nt.observe(notificationName) { (payload:String) in
         print("This closure observes nothing but NSNotification with String payload.", payload)
     }
-    nt.observe(notificationName) { (_, payload:Int) in
+    nt.observe(notificationName) { (payload:Int) in
         print("This closure observes nothing but NSNotification with Int payload.", payload)
     }
     
@@ -47,6 +47,12 @@ Notifwift resolves;
     //printed:
     // This closure observes nothing but NSNotification with Int payload. 1
 ```
+
+The receiver block accepts:
+
+- `(NSNotification) -> Void`
+- `(NSNotification, T) -> Void`
+- `(T) -> Void`
 
 ```swift
     class Animal {}
@@ -137,9 +143,7 @@ final class MyViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        notifwift.observe(didReceiveUserNotification) { [weak self] (_, user: User) in
-            self?.reload(user)
-        }
+        notifwift.observe(didReceiveUserNotification, block: reload)
     }
     
     private func reload(user: User) {
