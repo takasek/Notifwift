@@ -50,6 +50,14 @@ public final class Notifwift {
             }
         )
     }
+    public func observe<T>(name: String, from object: AnyObject?=nil, queue: NSOperationQueue?=nil, block:(payload: T) -> Void) {
+        pool.append(
+            NSNotificationCenter.defaultCenter().addObserverForName(name, object: object, queue: queue) {
+                guard let payload = ($0.userInfo?["container"] as? Container)?.payload as? T else { return }
+                block(payload: payload)
+            }
+        )
+    }
     deinit {
         pool.forEach { NSNotificationCenter.defaultCenter().removeObserver($0) }
     }

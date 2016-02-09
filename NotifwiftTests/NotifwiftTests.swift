@@ -34,7 +34,31 @@ class NotifwiftTests: XCTestCase {
     func testPayloads() {
         var payloadStr: Any?
         var payloadInt: Any?
-        
+
+        let nt = Notifwift()
+        nt.observe(notificationName) { (p:String) in
+            payloadStr = p
+        }
+        nt.observe(notificationName) { (p:Int) in
+            payloadInt = p
+        }
+
+        payloadStr = nil
+        payloadInt = nil
+        Notifwift.post(notificationName, payload:"aaaa")
+        XCTAssertEqual(payloadStr as? String, "aaaa")
+        XCTAssertNil(payloadInt)
+
+        payloadStr = nil
+        payloadInt = nil
+        Notifwift.post(notificationName, payload:1111)
+        XCTAssertNil(payloadStr)
+        XCTAssertEqual(payloadInt as? Int, 1111)
+    }
+    func testNotificationAndPayloads() {
+        var payloadStr: Any?
+        var payloadInt: Any?
+
         let nt = Notifwift()
         nt.observe(notificationName) { (_, p:String) in
             payloadStr = p
@@ -42,20 +66,20 @@ class NotifwiftTests: XCTestCase {
         nt.observe(notificationName) { (_, p:Int) in
             payloadInt = p
         }
-        
+
         payloadStr = nil
         payloadInt = nil
         Notifwift.post(notificationName, payload:"aaaa")
         XCTAssertEqual(payloadStr as? String, "aaaa")
         XCTAssertNil(payloadInt)
-        
+
         payloadStr = nil
         payloadInt = nil
         Notifwift.post(notificationName, payload:1111)
         XCTAssertNil(payloadStr)
         XCTAssertEqual(payloadInt as? Int, 1111)
     }
-    
+
     func testSubtype() {
         var received: Bool?
         var receivedSub: Bool?
