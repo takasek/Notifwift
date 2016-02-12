@@ -3,6 +3,7 @@
 [![Version](https://img.shields.io/cocoapods/v/Notifwift.svg?style=flat)](http://cocoapods.org/pods/Notifwift)
 [![License](https://img.shields.io/cocoapods/l/Notifwift.svg?style=flat)](http://cocoapods.org/pods/Notifwift)
 [![Platform](https://img.shields.io/cocoapods/p/Notifwift.svg?style=flat)](http://cocoapods.org/pods/Notifwift)
+[![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 Notifwift is the NS**Notif**icationCenter wrapper for S**wift**.
 
