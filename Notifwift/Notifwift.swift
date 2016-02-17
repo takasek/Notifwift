@@ -23,14 +23,14 @@
 import Foundation
 
 public final class Notifwift {
-    private final class Container {
+    private final class PayloadContainer {
         static let Key = "container"
         
         let payload: Any
         init(payload: Any) { self.payload = payload }
     }
     
-    private final class PoolContainer {
+    private struct ObserverContainer {
         private let name: String
         private let observer: NSObjectProtocol
         init(name: String, observer: NSObjectProtocol) {
@@ -39,7 +39,7 @@ public final class Notifwift {
         }
     }
     
-    private var pool = [PoolContainer]()
+    private var pool = [ObserverContainer]()
     private let nc = NSNotificationCenter.defaultCenter()
     
     public init() {}
@@ -47,7 +47,7 @@ public final class Notifwift {
     public static func post(name: String, from object: NSObject?=nil, payload: Any?=nil) {
         NSNotificationCenter.defaultCenter().postNotificationName(name,
             object: object,
-            userInfo: payload.map { [Container.Key: Container(payload: $0)] }
+            userInfo: payload.map { [PayloadContainer.Key: PayloadContainer(payload: $0)] }
         )
     }
     
@@ -75,7 +75,7 @@ public final class Notifwift {
     
     // MARK: private methods
     private func addToPool(name: String, from object: AnyObject?=nil, queue: NSOperationQueue?=nil, block: (NSNotification) -> Void) {
-        let container = PoolContainer(
+        let container = ObserverContainer(
             name: name,
             observer: nc.addObserverForName(name, object: object, queue: queue, usingBlock: block)
         )
@@ -83,16 +83,16 @@ public final class Notifwift {
     }
     
     private func removeFromPool(name: String) {
-        pool.filter{ $0.name == name}.forEach { poolContainer in
-            if let index = pool.indexOf({ $0.name == poolContainer.name}) {
-                NSNotificationCenter.defaultCenter().removeObserver(poolContainer.observer)
+        pool.filter{ $0.name == name}.forEach { ObserverContainer in
+            if let index = pool.indexOf({ $0.name == ObserverContainer.name}) {
+                NSNotificationCenter.defaultCenter().removeObserver(ObserverContainer.observer)
                 pool.removeAtIndex(index)
             }
         }
     }
     
     private func payloadFromNotification(notification: NSNotification) -> Any? {
-        return (notification.userInfo?[Container.Key] as? Container)?.payload
+        return (notification.userInfo?[PayloadContainer.Key] as? PayloadContainer)?.payload
     }
     
     deinit {
