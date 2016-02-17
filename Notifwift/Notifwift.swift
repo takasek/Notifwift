@@ -23,42 +23,77 @@
 import Foundation
 
 public final class Notifwift {
-    private final class Container {
+    private final class PayloadContainer {
+        static let Key = "container"
+        
         let payload: Any
         init(payload: Any) { self.payload = payload }
     }
-    private var pool = [NSObjectProtocol]()
-
+    
+    private struct ObserverContainer {
+        private let name: String
+        private let observer: NSObjectProtocol
+        init(name: String, observer: NSObjectProtocol) {
+            self.name = name
+            self.observer = observer
+        }
+    }
+    
+    private var pool = [ObserverContainer]()
+    
     public init() {}
 
     public static func post(name: String, from object: NSObject?=nil, payload: Any?=nil) {
         NSNotificationCenter.defaultCenter().postNotificationName(name,
             object: object,
-            userInfo: payload.map { ["container": Container(payload: $0)] }
+            userInfo: payload.map { [PayloadContainer.Key: PayloadContainer(payload: $0)] }
         )
     }
-    public func observe(name: String, from object: AnyObject?=nil, queue: NSOperationQueue?=nil, block:(notification:NSNotification) -> Void) {
-        pool.append(
-            NSNotificationCenter.defaultCenter().addObserverForName(name, object: object, queue: queue, usingBlock: block)
-        )
+    
+    public func observe(name: String, from object: AnyObject?=nil, queue: NSOperationQueue?=nil, block: (notification:NSNotification) -> Void) {
+        addToPool(name, from: object, queue: queue, block: block)
     }
-    public func observe<T>(name: String, from object: AnyObject?=nil, queue: NSOperationQueue?=nil, block:(notification:NSNotification, payload: T) -> Void) {
-        pool.append(
-            NSNotificationCenter.defaultCenter().addObserverForName(name, object: object, queue: queue) {
-                guard let payload = ($0.userInfo?["container"] as? Container)?.payload as? T else { return }
-                block(notification: $0, payload: payload)
-            }
-        )
+    
+    public func observe<T>(name: String, from object: AnyObject?=nil, queue: NSOperationQueue?=nil, block: (notification:NSNotification, payload: T) -> Void) {
+        addToPool(name, from: object, queue: queue) { [weak self] in
+            guard let payload = self?.payloadFromNotification($0) as? T else { return }
+            block(notification: $0, payload: payload)
+        }
     }
-    public func observe<T>(name: String, from object: AnyObject?=nil, queue: NSOperationQueue?=nil, block:(payload: T) -> Void) {
-        pool.append(
-            NSNotificationCenter.defaultCenter().addObserverForName(name, object: object, queue: queue) {
-                guard let payload = ($0.userInfo?["container"] as? Container)?.payload as? T else { return }
-                block(payload: payload)
-            }
-        )
+    
+    public func observe<T>(name: String, from object: AnyObject?=nil, queue: NSOperationQueue?=nil, block: (payload: T) -> Void) {
+        addToPool(name, from: object, queue: queue) { [weak self] in
+            guard let payload = self?.payloadFromNotification($0) as? T else { return }
+            block(payload: payload)
+        }
     }
+    
+    public func dispose(name: String) {
+        removeFromPool(name)
+    }
+    
+    // MARK: private methods
+    private func addToPool(name: String, from object: AnyObject?=nil, queue: NSOperationQueue?=nil, block: (NSNotification) -> Void) {
+        let container = ObserverContainer(
+            name: name,
+            observer: NSNotificationCenter.defaultCenter().addObserverForName(name, object: object, queue: queue, usingBlock: block)
+        )
+        pool.append(container)
+    }
+    
+    private func removeFromPool(name: String) {
+        pool.enumerate().filter { $0.element.name == name }.reverse().forEach { index, container in
+            NSNotificationCenter.defaultCenter().removeObserver(container.observer)
+            pool.removeAtIndex(index)
+        }
+    }
+    
+    private func payloadFromNotification(notification: NSNotification) -> Any? {
+        return (notification.userInfo?[PayloadContainer.Key] as? PayloadContainer)?.payload
+    }
+    
     deinit {
-        pool.forEach { NSNotificationCenter.defaultCenter().removeObserver($0) }
+        pool.forEach { NSNotificationCenter.defaultCenter().removeObserver($0.observer) }
+        pool.removeAll()
     }
 }
