@@ -30,12 +30,16 @@ public final class Notifwift {
         init(payload: Any) { self.payload = payload }
     }
     
-    private struct ObserverContainer {
+    private final class ObserverContainer {
         private let name: String
         private let observer: NSObjectProtocol
         init(name: String, observer: NSObjectProtocol) {
             self.name = name
             self.observer = observer
+        }
+        
+        deinit {
+            NSNotificationCenter.defaultCenter().removeObserver(observer)
         }
     }
     
@@ -82,10 +86,7 @@ public final class Notifwift {
     }
     
     private func removeFromPool(name: String) {
-        pool.enumerate().filter { $0.element.name == name }.reverse().forEach { index, container in
-            NSNotificationCenter.defaultCenter().removeObserver(container.observer)
-            pool.removeAtIndex(index)
-        }
+        pool = pool.filter { $0.name != name }
     }
     
     private func payloadFromNotification(notification: NSNotification) -> Any? {
@@ -93,7 +94,6 @@ public final class Notifwift {
     }
     
     deinit {
-        pool.forEach { NSNotificationCenter.defaultCenter().removeObserver($0.observer) }
         pool.removeAll()
     }
 }
