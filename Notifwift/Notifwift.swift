@@ -40,7 +40,6 @@ public final class Notifwift {
     }
     
     private var pool = [ObserverContainer]()
-    private let nc = NSNotificationCenter.defaultCenter()
     
     public init() {}
 
@@ -77,7 +76,7 @@ public final class Notifwift {
     private func addToPool(name: String, from object: AnyObject?=nil, queue: NSOperationQueue?=nil, block: (NSNotification) -> Void) {
         let container = ObserverContainer(
             name: name,
-            observer: nc.addObserverForName(name, object: object, queue: queue, usingBlock: block)
+            observer: NSNotificationCenter.defaultCenter().addObserverForName(name, object: object, queue: queue, usingBlock: block)
         )
         pool.append(container)
     }
