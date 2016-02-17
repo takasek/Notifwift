@@ -83,11 +83,9 @@ public final class Notifwift {
     }
     
     private func removeFromPool(name: String) {
-        pool.filter{ $0.name == name}.forEach { ObserverContainer in
-            if let index = pool.indexOf({ $0.name == ObserverContainer.name}) {
-                NSNotificationCenter.defaultCenter().removeObserver(ObserverContainer.observer)
-                pool.removeAtIndex(index)
-            }
+        pool.enumerate().filter { $0.element.name == name }.reverse().forEach { index, container in
+            NSNotificationCenter.defaultCenter().removeObserver(container.observer)
+            pool.removeAtIndex(index)
         }
     }
     
