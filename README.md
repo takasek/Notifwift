@@ -130,6 +130,12 @@ The receiver block accepts:
     // Received from obj2 only
 ```
 
+Since the registered observers for notifications are to disposed automatically when the Notifwift instance is dead, you can dispose them by your self.
+
+```
+    nt.dispose(dispose)
+```
+
 
 ## Real World Example
 
