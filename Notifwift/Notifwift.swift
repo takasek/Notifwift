@@ -25,7 +25,6 @@ import Foundation
 public final class Notifwift {
     private final class PayloadContainer {
         static let Key = "container"
-        
         let payload: Any
         init(payload: Any) { self.payload = payload }
     }
