@@ -30,20 +30,20 @@ public final class Notifwift {
     }
     
     private final class ObserverContainer {
-        private let name: String
+        fileprivate let name: String
         private let observer: NSObjectProtocol
         
-        init(name: String, object: AnyObject?, queue: NSOperationQueue?, block: (notification:NSNotification) -> Void) {
+        init(name: String, object: AnyObject?, queue: OperationQueue?, block: @escaping (_ notification:Notification) -> Void) {
             self.name = name
-            self.observer = NSNotificationCenter.defaultCenter().addObserverForName(name,
+            self.observer = NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: name),
                 object: object,
                 queue: queue,
-                usingBlock: block
+                using: block
             )
         }
         
         deinit {
-            NSNotificationCenter.defaultCenter().removeObserver(observer)
+            NotificationCenter.default.removeObserver(observer)
         }
     }
     
@@ -51,45 +51,45 @@ public final class Notifwift {
     
     public init() {}
 
-    public static func post(name: String, from object: NSObject?=nil, payload: Any?=nil) {
-        NSNotificationCenter.defaultCenter().postNotificationName(name,
+    public static func post(_ name: String, from object: NSObject? = nil, payload: Any? = nil) {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: name),
             object: object,
             userInfo: payload.map { [PayloadContainer.Key: PayloadContainer(payload: $0)] }
         )
     }
     
-    public func observe(name: String, from object: AnyObject?=nil, queue: NSOperationQueue?=nil, block: (notification: NSNotification) -> Void) {
+    public func observe(_ name: String, from object: AnyObject? = nil, queue: OperationQueue? = nil, block: @escaping (_ notification: Notification) -> Void) {
         addToPool(name, object: object, queue: queue, block: block)
     }
     
-    public func observe<T>(name: String, from object: AnyObject?=nil, queue: NSOperationQueue?=nil, block: (notification: NSNotification, payload: T) -> Void) {
+    public func observe<T>(_ name: String, from object: AnyObject? = nil, queue: OperationQueue? = nil, block: @escaping (_ notification: Notification, _ payload: T) -> Void) {
         addToPool(name, object: object, queue: queue) { [weak self] in
             guard let payload = self?.payloadFromNotification($0) as? T else { return }
-            block(notification: $0, payload: payload)
+            block($0, payload)
         }
     }
     
-    public func observe<T>(name: String, from object: AnyObject?=nil, queue: NSOperationQueue?=nil, block: (payload: T) -> Void) {
+    public func observe<T>(_ name: String, from object: AnyObject? = nil, queue: OperationQueue? = nil, block: @escaping (_ payload: T) -> Void) {
         addToPool(name, object: object, queue: queue) { [weak self] in
             guard let payload = self?.payloadFromNotification($0) as? T else { return }
-            block(payload: payload)
+            block(payload)
         }
     }
     
-    public func dispose(name: String) {
+    public func dispose(_ name: String) {
         removeFromPool(name)
     }
     
     // MARK: private methods
-    private func addToPool(name: String, object: AnyObject?, queue: NSOperationQueue?, block: (NSNotification) -> Void) {
+    fileprivate func addToPool(_ name: String, object: AnyObject?, queue: OperationQueue?, block: @escaping (Notification) -> Void) {
         pool.append(ObserverContainer(name: name, object: object, queue: queue, block: block))
     }
     
-    private func removeFromPool(name: String) {
+    fileprivate func removeFromPool(_ name: String) {
         pool = pool.filter { $0.name != name }
     }
     
-    private func payloadFromNotification(notification: NSNotification) -> Any? {
+    fileprivate func payloadFromNotification(_ notification: Notification) -> Any? {
         return (notification.userInfo?[PayloadContainer.Key] as? PayloadContainer)?.payload
     }
     
