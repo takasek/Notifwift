@@ -35,7 +35,7 @@ public final class Notifwift {
         
         init(name: String, object: AnyObject?, queue: OperationQueue?, block: @escaping (_ notification:Notification) -> Void) {
             self.name = name
-            self.observer = NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: name),
+            self.observer = NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: name),
                 object: object,
                 queue: queue,
                 using: block
@@ -90,7 +90,7 @@ public final class Notifwift {
     }
     
     fileprivate func payloadFromNotification(_ notification: Notification) -> Any? {
-        return ((notification as NSNotification).userInfo?[PayloadContainer.Key] as? PayloadContainer)?.payload
+        return (notification.userInfo?[PayloadContainer.Key] as? PayloadContainer)?.payload
     }
     
     deinit {
