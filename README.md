@@ -174,6 +174,8 @@ It dies when MyViewController instance dies, so observers registered in the Noti
 
 ## Installation
 
+### For Swift 3.0
+
 Notifwift is available through [CocoaPods](http://cocoapods.org). To install it, simply add the following line to your Podfile:
 
 ```ruby
@@ -185,6 +187,11 @@ Notifwift is available through [Carthage](https://github.com/Carthage/Carthage).
 ```ruby
 github "takasek/Notifwift"
 ```
+
+### for Swift 2.3
+
+take a look at the [`Swift-2.3` branch](https://github.com/takasek/Notifwift/tree/swift-2.3)
+
 
 ## Author
 
