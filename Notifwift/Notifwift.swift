@@ -66,14 +66,14 @@ public final class Notifwift {
     
     public func observe<T>(_ name: Notification.Name, from object: AnyObject? = nil, queue: OperationQueue? = nil, block: @escaping (_ notification: Notification, _ payload: T) -> Void) {
         addToPool(name, object: object, queue: queue) { [weak self] in
-            guard let payload = self?.payload(from: $0) as? T else { return }
+            guard let payload: T = self?.payload(from: $0) else { return }
             block($0, payload)
         }
     }
     
     public func observe<T>(_ name: Notification.Name, from object: AnyObject? = nil, queue: OperationQueue? = nil, block: @escaping (_ payload: T) -> Void) {
         addToPool(name, object: object, queue: queue) { [weak self] in
-            guard let payload = self?.payload(from: $0) as? T else { return }
+            guard let payload: T = self?.payload(from: $0) else { return }
             block(payload)
         }
     }
@@ -91,8 +91,8 @@ public final class Notifwift {
         pool = pool.filter { $0.name != name }
     }
     
-    private func payload(from notification: Notification) -> Any? {
-        return (notification.userInfo?[PayloadContainer.Key] as? PayloadContainer)?.payload
+    private func payload<T>(from notification: Notification) -> T? {
+        return (notification.userInfo?[PayloadContainer.Key] as? PayloadContainer)?.payload as? T
     }
     
     deinit {
