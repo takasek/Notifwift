@@ -9,7 +9,7 @@
 import XCTest
 @testable import Notifwift
 
-let notificationName = "Hoge"
+let notificationName = NSNotification.Name("Hoge")
 
 class NotifwiftTests: XCTestCase {
     
