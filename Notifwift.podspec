@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Notifwift"
-  s.version          = "0.6.0"
+  s.version          = "1.0.0"
   s.summary          = "NSNotificationCenter wrapper for Swift"
   s.license          = 'MIT'
   s.homepage         = "https://github.com/takasek/Notifwift"
