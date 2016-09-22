@@ -30,13 +30,13 @@ public final class Notifwift {
     }
     
     private final class ObserverContainer {
-        let name: String
+        let name: Notification.Name
         let observer: NSObjectProtocol
         
-        init(name: String, object: AnyObject?, queue: OperationQueue?, block: @escaping (_ notification: Notification) -> Void) {
+        init(name: Notification.Name, object: AnyObject?, queue: OperationQueue?, block: @escaping (_ notification: Notification) -> Void) {
             self.name = name
             self.observer = NotificationCenter.default.addObserver(
-                forName: Notification.Name(rawValue: name),
+                forName: name,
                 object: object,
                 queue: queue,
                 using: block
@@ -52,42 +52,42 @@ public final class Notifwift {
     
     public init() {}
 
-    public static func post(_ name: String, from object: NSObject? = nil, payload: Any? = nil) {
+    public static func post(_ name: Notification.Name, from object: NSObject? = nil, payload: Any? = nil) {
         NotificationCenter.default.post(
-            name: Notification.Name(rawValue: name),
+            name: name,
             object: object,
             userInfo: payload.map { [PayloadContainer.Key: PayloadContainer(payload: $0)] }
         )
     }
     
-    public func observe(_ name: String, from object: AnyObject? = nil, queue: OperationQueue? = nil, block: @escaping (_ notification: Notification) -> Void) {
+    public func observe(_ name: Notification.Name, from object: AnyObject? = nil, queue: OperationQueue? = nil, block: @escaping (_ notification: Notification) -> Void) {
         addToPool(name, object: object, queue: queue, block: block)
     }
     
-    public func observe<T>(_ name: String, from object: AnyObject? = nil, queue: OperationQueue? = nil, block: @escaping (_ notification: Notification, _ payload: T) -> Void) {
+    public func observe<T>(_ name: Notification.Name, from object: AnyObject? = nil, queue: OperationQueue? = nil, block: @escaping (_ notification: Notification, _ payload: T) -> Void) {
         addToPool(name, object: object, queue: queue) { [weak self] in
             guard let payload = self?.payload(from: $0) as? T else { return }
             block($0, payload)
         }
     }
     
-    public func observe<T>(_ name: String, from object: AnyObject? = nil, queue: OperationQueue? = nil, block: @escaping (_ payload: T) -> Void) {
+    public func observe<T>(_ name: Notification.Name, from object: AnyObject? = nil, queue: OperationQueue? = nil, block: @escaping (_ payload: T) -> Void) {
         addToPool(name, object: object, queue: queue) { [weak self] in
             guard let payload = self?.payload(from: $0) as? T else { return }
             block(payload)
         }
     }
     
-    public func dispose(_ name: String) {
+    public func dispose(_ name: Notification.Name) {
         removeFromPool(name)
     }
     
     // MARK: private methods
-    private func addToPool(_ name: String, object: AnyObject?, queue: OperationQueue?, block: @escaping (Notification) -> Void) {
+    private func addToPool(_ name: Notification.Name, object: AnyObject?, queue: OperationQueue?, block: @escaping (Notification) -> Void) {
         pool.append(ObserverContainer(name: name, object: object, queue: queue, block: block))
     }
     
-    private func removeFromPool(_ name: String) {
+    private func removeFromPool(_ name: Notification.Name) {
         pool = pool.filter { $0.name != name }
     }
     
