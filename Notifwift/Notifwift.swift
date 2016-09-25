@@ -52,7 +52,7 @@ public final class Notifwift {
     
     public init() {}
 
-    public static func post(_ name: Notification.Name, from object: NSObject? = nil, payload: Any? = nil) {
+    public static func post(_ name: Notification.Name, from object: Any? = nil, payload: Any? = nil) {
         NotificationCenter.default.post(
             name: name,
             object: object,
