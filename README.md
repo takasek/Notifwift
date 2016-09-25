@@ -9,22 +9,23 @@ Notifwift is the NS**Notif**icationCenter wrapper for S**wift**.
 
 Notifwift resolves;
 
-- cumbersome management of NSNotification observers
-- ugly payload through userInfo `[String: AnyObject]` which cannot contain structs nor enum.
+- cumbersome management of Notification observers
+- meaningless dictionary key required for Notification.userInfo
 - long syntax to post/observe notifications
 
 
 ## Usage
 
 ```swift
+    let notificationName = Notification.Name(rawValue: "YourNotificationName")
     do {
-        let nt = Notifwift()
-        nt.observe(notificationName) { notification in
-            print("Notifwift can observe NSNotification in simple way.", notification)
+        let notifwift = Notifwift()
+        notifwift.observe(notificationName) {(notification) in
+            print("Notifwift can observe Notification in simple way.", notification)
         }
         Notifwift.post(notificationName)
         //printed:
-        // Notifwift can observe NSNotification in simple way. NSConcreteNotification 0x7fdfa0414b20 {name = Hoge}
+        // Notifwift can observe Notification in simple way. name = YourNotificationName, object = nil, userInfo = nil
     }
     
     Notifwift.post(notificationName)
@@ -32,38 +33,38 @@ Notifwift resolves;
 ```
 
 ```swift
-    let nt = Notifwift()
-    nt.observe(notificationName) { (payload:String) in
-        print("This closure observes nothing but NSNotification with String payload.", payload)
+    let notifwift = Notifwift()
+    notifwift.observe(notificationName) { (payload: String) in
+        print("This closure observes nothing but Notification with String payload.", payload)
     }
-    nt.observe(notificationName) { (payload:Int) in
-        print("This closure observes nothing but NSNotification with Int payload.", payload)
+    notifwift.observe(notificationName) { (payload: Int) in
+        print("This closure observes nothing but Notification with Int payload.", payload)
     }
     
     Notifwift.post(notificationName, payload:"aaaa")
     //printed:
-    // This closure observes nothing but NSNotification with String payload. aaaa
+    // This closure observes nothing but Notification with String payload. aaaa
     
     Notifwift.post(notificationName, payload:1)
     //printed:
-    // This closure observes nothing but NSNotification with Int payload. 1
+    // This closure observes nothing but Notification with Int payload. 1
 ```
 
 The receiver block accepts:
 
-- `(NSNotification) -> Void`
-- `(NSNotification, T) -> Void`
+- `(Notification) -> Void`
+- `(Notification, T) -> Void`
 - `(T) -> Void`
 
 ```swift
     class Animal {}
     class Cat: Animal {}
     
-    let nt = Notifwift()
-    nt.observe(notificationName) { (_, p:Animal) in
+    let notifwift = Notifwift()
+    notifwift.observe(notificationName) { (_, p:Animal) in
         print("Received Animal.", p)
     }
-    nt.observe(notificationName) { (_, p:Cat) in
+    notifwift.observe(notificationName) { (_, p:Cat) in
         print("Received Cat. Yes, of course, Notifwift recognizes subtypes.", p)
     }
     
@@ -82,8 +83,8 @@ The receiver block accepts:
         case Success(String)
         case Fail(NSError)
     }
-    let nt = Notifwift()
-    nt.observe(notificationName) { (_, p:SomeResult) in
+    let notifwift = Notifwift()
+    notifwift.observe(notificationName) { (_, p:SomeResult) in
         switch p {
         case .Success(let str):
             print("Any Type can be used as a payload", str)
@@ -108,14 +109,14 @@ The receiver block accepts:
 ```swift
     let obj1 = NSObject()
     let obj2 = NSObject()
-    let nt = Notifwift()
-    nt.observe(notificationName) { _ in
+    let notifwift = Notifwift()
+    notifwift.observe(notificationName) { _ in
         print("Received from all objects")
     }
-    nt.observe(notificationName, from: obj1) { _ in
+    notifwift.observe(notificationName, from: obj1) { _ in
         print("Received from obj1 only")
     }
-    nt.observe(notificationName, from: obj2) { _ in
+    notifwift.observe(notificationName, from: obj2) { _ in
         print("Received from obj2 only")
     }
     
@@ -133,7 +134,7 @@ The receiver block accepts:
 Since the registered observers for notifications are to disposed automatically when the Notifwift instance is dead, you can dispose them by your self.
 
 ```
-    nt.dispose(dispose)
+    notifwift.dispose(dispose)
 ```
 
 
@@ -142,7 +143,7 @@ Since the registered observers for notifications are to disposed automatically w
 Here's an example usage.
 
 ```swift
-let didReceiveUserNotification = "didReceiveUserNotification"
+let didReceiveUserNotification = Notification.Name(rawValue: "didReceiveUserNotification")
 
 final class MyViewController: UIViewController {
     @IBOutlet var userInfoView: MyUserInfoView!
