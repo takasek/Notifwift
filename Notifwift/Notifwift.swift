@@ -23,12 +23,8 @@
 import Foundation
 
 public final class Notifwift {
-    private final class PayloadContainer {
-        static let Key = "container"
-        let payload: Any
-        init(payload: Any) { self.payload = payload }
-    }
-    
+    private static let payloadKey = "NotifwiftPayloadKey"
+
     private final class ObserverContainer {
         let name: Notification.Name
         let observer: NSObjectProtocol
@@ -56,7 +52,7 @@ public final class Notifwift {
         NotificationCenter.default.post(
             name: name,
             object: object,
-            userInfo: payload.map { [PayloadContainer.Key: PayloadContainer(payload: $0)] }
+            userInfo: payload.map { [Notifwift.payloadKey: $0] }
         )
     }
     
@@ -92,7 +88,7 @@ public final class Notifwift {
     }
     
     private func payload<T>(from notification: Notification) -> T? {
-        return (notification.userInfo?[PayloadContainer.Key] as? PayloadContainer)?.payload as? T
+        return notification.userInfo?[Notifwift.payloadKey] as? T
     }
     
     deinit {
