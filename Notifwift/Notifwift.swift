@@ -33,7 +33,7 @@ public final class Notifwift {
         let name: Notification.Name
         let observer: NSObjectProtocol
         
-        init(name: Notification.Name, object: AnyObject?, queue: OperationQueue?, block: @escaping (_ notification: Notification) -> Void) {
+        init(name: Notification.Name, object: Any?, queue: OperationQueue?, block: @escaping (_ notification: Notification) -> Void) {
             self.name = name
             self.observer = NotificationCenter.default.addObserver(
                 forName: name,
@@ -60,18 +60,18 @@ public final class Notifwift {
         )
     }
     
-    public func observe(_ name: Notification.Name, from object: AnyObject? = nil, queue: OperationQueue? = nil, block: @escaping (_ notification: Notification) -> Void) {
+    public func observe(_ name: Notification.Name, from object: Any? = nil, queue: OperationQueue? = nil, block: @escaping (_ notification: Notification) -> Void) {
         addToPool(name, object: object, queue: queue, block: block)
     }
     
-    public func observe<T>(_ name: Notification.Name, from object: AnyObject? = nil, queue: OperationQueue? = nil, block: @escaping (_ notification: Notification, _ payload: T) -> Void) {
+    public func observe<T>(_ name: Notification.Name, from object: Any? = nil, queue: OperationQueue? = nil, block: @escaping (_ notification: Notification, _ payload: T) -> Void) {
         addToPool(name, object: object, queue: queue) { [weak self] in
             guard let payload: T = self?.payload(from: $0) else { return }
             block($0, payload)
         }
     }
     
-    public func observe<T>(_ name: Notification.Name, from object: AnyObject? = nil, queue: OperationQueue? = nil, block: @escaping (_ payload: T) -> Void) {
+    public func observe<T>(_ name: Notification.Name, from object: Any? = nil, queue: OperationQueue? = nil, block: @escaping (_ payload: T) -> Void) {
         addToPool(name, object: object, queue: queue) { [weak self] in
             guard let payload: T = self?.payload(from: $0) else { return }
             block(payload)
@@ -83,7 +83,7 @@ public final class Notifwift {
     }
     
     // MARK: private methods
-    private func addToPool(_ name: Notification.Name, object: AnyObject?, queue: OperationQueue?, block: @escaping (Notification) -> Void) {
+    private func addToPool(_ name: Notification.Name, object: Any?, queue: OperationQueue?, block: @escaping (Notification) -> Void) {
         pool.append(ObserverContainer(name: name, object: object, queue: queue, block: block))
     }
     
