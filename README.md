@@ -150,7 +150,7 @@ final class MyViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        notifwift.observe(didReceiveUserNotification, block: reload)
+        notifwift.observe(didReceiveUserNotification) { [unowned self] in self.reload($0) } //Use `weak` or `unowned` on calling the self methods to avoid retain cycles.
     }
     
     private func reload(user: User) {
