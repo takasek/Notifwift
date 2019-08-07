@@ -23,6 +23,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		82964C4F22FAB2B600D64A33 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		B60EF8A81C671A3E00FC0BBC /* Notifwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Notifwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B60EF8AD1C671A3E00FC0BBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B60EF8B21C671A3E00FC0BBC /* NotifwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NotifwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -53,6 +54,7 @@
 		B60EF89E1C671A3E00FC0BBC = {
 			isa = PBXGroup;
 			children = (
+				82964C4F22FAB2B600D64A33 /* Package.swift */,
 				B60EF8AA1C671A3E00FC0BBC /* Notifwift */,
 				B60EF8B61C671A3E00FC0BBC /* NotifwiftTests */,
 				B60EF8A91C671A3E00FC0BBC /* Products */,
