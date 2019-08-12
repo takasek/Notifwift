@@ -8,8 +8,9 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/takasek/Notifwift.git",
                          :tag => s.version.to_s }
   s.source_files     = "Sources/*.swift"
+  s.swift_version    = "4.2"
   s.requires_arc     = true
 
-  s.ios.deployment_target = "9.2"
+  s.ios.deployment_target = "8.0"
   s.source_files = 'Notifwift/*.swift'
 end
