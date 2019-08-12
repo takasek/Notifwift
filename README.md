@@ -172,27 +172,7 @@ final class MyUserRepository {
 The Notifwift instance is alive during MyViewController instance.
 It dies when MyViewController instance dies, so observers registered in the Notifwift instance are to be removed automatically.  Never mind if you have to manage observer!
 
-
-## Migration to Swift 3.0
-
-Notifwift 0.x accepts notification names as `String literal`. However, Notifwift 1.x accepts them as `Notification.Name`.
-
-The change comes from the `Swift 3.0`'s concept.
-
-[https://swift.org/migration-guide/](https://swift.org/migration-guide/) says,
-
->In Swift 3, many of Foundation’s “stringly-typed” APIs have been changed to use struct “wrapper types”, such as the new Notification.Name type. Since, it’s common for notification names and other string constants to be declared globally or as static members, the best way to take advantage of these new types is usually to construct the wrapper at the point of declaration:
->
-```swift
-static let MyGreatNotification = Notification.Name("MyGreatNotification")
-// Use site (no change)
-NotificationCenter.default().post(name: MyController.MyGreatNotification, object: self)'
-```
-
-
 ## Installation
-
-### For Swift 3.0
 
 Notifwift is available through [CocoaPods](http://cocoapods.org). To install it, simply add the following line to your Podfile:
 
@@ -205,11 +185,6 @@ Notifwift is available through [Carthage](https://github.com/Carthage/Carthage).
 ```ruby
 github "takasek/Notifwift"
 ```
-
-### for Swift 2.3
-
-take a look at the [`Swift-2.3` branch](https://github.com/takasek/Notifwift/tree/swift-2.3)
-
 
 ## Author
 
